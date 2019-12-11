@@ -9,6 +9,7 @@
 #include <vector>
 
 #include <opencv2/opencv.hpp>
+#include <opencv2/imgproc/types_c.h>
 
 #include <flowfilter/gpu/flowfilter.h>
 #include <flowfilter/gpu/display.h>
@@ -125,6 +126,7 @@ int main(int argc, char** argv) {
         flowColor.compute();
         flowColor.downloadColorFlow(hostFlowColor);
         cvtColor(fcolor, fcolor, CV_RGBA2BGRA);
+	// cvtColor(fcolor, fcolor, RGBA2BGRA);//nope
 
         imshow("image", frameGray);
         imshow("optical flow", fcolor);
