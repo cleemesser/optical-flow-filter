@@ -1,0 +1,9 @@
+probably can start by
+
+optic flow flowrgb -> flowgreyscale
+
+calculate histogram as shown in opencv example
+
+
+can start some simple detectors as well in opencv -- may be useful for curration of training set
+the git repo has pretrained detectors
