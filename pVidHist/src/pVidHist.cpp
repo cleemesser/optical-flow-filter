@@ -153,6 +153,10 @@ int main(int argc, char** argv) {
         flowColor.downloadColorFlow(hostFlowColor);
 
     split( fcolor, bgr_planes );
+    // b_hist = Scalar(0);
+    // g_hist = Scalar(0);
+    // r_hist = Scalar(0);
+
     calcHist( &bgr_planes[0], 1, 0, Mat(), b_hist, 1, &histSize, &histRange, uniform, accumulate );
     calcHist( &bgr_planes[1], 1, 0, Mat(), g_hist, 1, &histSize, &histRange, uniform, accumulate );
     calcHist( &bgr_planes[2], 1, 0, Mat(), r_hist, 1, &histSize, &histRange, uniform, accumulate );
@@ -161,6 +165,7 @@ int main(int argc, char** argv) {
     normalize(b_hist, b_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
     normalize(g_hist, g_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
     normalize(r_hist, r_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
+    histImage = Scalar(0,0,0);
     for( int i = 1; i < histSize; i++ )
     {
         line( histImage, Point( bin_w*(i-1), hist_h - cvRound(b_hist.at<float>(i-1)) ),
@@ -184,7 +189,7 @@ int main(int argc, char** argv) {
         imshow("image", frameGray);
         imshow("optical flow", fcolor);
 
-        if ( (waitKey(10) & 0xFF) == 27) break; // allows time for fetch of events so images are displayed
+        if ( (waitKey(3) & 0xFF) == 27) break; // allows time for fetch of events so images are displayed
 
     }
     cout << "finished\n";
