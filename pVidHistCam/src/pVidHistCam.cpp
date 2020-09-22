@@ -39,21 +39,14 @@ void wrapCVMat(Mat& cvMat, image_t& img) {
 int main(int argc, char** argv) {
     string video_file = string("/home/clee/code/eegml/data/goodvideo_lpch/myoclonic-atonic-vid02.mp4");
     
-    // int cameraIndex = 0;
-    //string video_file = string("/home/clee/code/eegml/data/goodvideo_lpch/myoclonic-atonic-vid02.mp4");
-
+    int cameraIndex = 0;
     // if user provides camera index
     if(argc > 1) {
-      // cameraIndex = atoi(argv[1]);
-      video_file = argv[1];
-    } else {
-      video_file = "/home/clee/code/eegml/data/goodvideo_lpch/myoclonic-atonic-vid02.mp4";
+      cameraIndex = atoi(argv[1]);
     }
-    
-    // VideoCapture cap(cameraIndex); // open the default camera
-    //VideoCapture cap("/home/clee/code/eegml/data/goodvideo_lpch/myoclonic-atonic-vid02.mp4"); // open a file
-    cout << "try to open: " << video_file << endl;
-    VideoCapture cap(video_file); // open a file
+    cout << "try to open camera index : " << cameraIndex << endl;    
+    VideoCapture cap(cameraIndex); // open the default camera
+
     if(!cap.isOpened()){
       cout << "Could not open " << video_file << endl;
         return -1;

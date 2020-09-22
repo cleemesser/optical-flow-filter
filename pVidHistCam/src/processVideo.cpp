@@ -107,21 +107,6 @@ int main(int argc, char** argv) {
     FlowToColor flowColor(filter.getFlow(), maxflow);
 
     int ret =0;
-
-    // histogram setup
-    vector<Mat> bgr_planes;
-    int histSize = 16;
-
-    float range[] = { 0, 256 }; //the upper boundary is exclusive
-    const float* histRange = { range };
-    bool uniform = true, accumulate = false;
-    Mat b_hist, g_hist, r_hist;
-    int hist_w = 512, hist_h = 400;
-    int bin_w = cvRound( (double) hist_w/histSize );
-    Mat histImage( hist_h, hist_w, CV_8UC3, Scalar( 0,0,0) );
-    //end histogram setup
-
-    
     // Capture loop
     for(;;) {
 
@@ -151,45 +136,13 @@ int main(int argc, char** argv) {
         // computes color encoding (RGBA) and download it to host
         flowColor.compute();
         flowColor.downloadColorFlow(hostFlowColor);
-
-    split( fcolor, bgr_planes );
-    // b_hist = Scalar(0);
-    // g_hist = Scalar(0);
-    // r_hist = Scalar(0);
-
-    calcHist( &bgr_planes[0], 1, 0, Mat(), b_hist, 1, &histSize, &histRange, uniform, accumulate );
-    calcHist( &bgr_planes[1], 1, 0, Mat(), g_hist, 1, &histSize, &histRange, uniform, accumulate );
-    calcHist( &bgr_planes[2], 1, 0, Mat(), r_hist, 1, &histSize, &histRange, uniform, accumulate );
-
-    
-    normalize(b_hist, b_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
-    normalize(g_hist, g_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
-    normalize(r_hist, r_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat() );
-    histImage = Scalar(0,0,0);
-    for( int i = 1; i < histSize; i++ )
-    {
-        line( histImage, Point( bin_w*(i-1), hist_h - cvRound(b_hist.at<float>(i-1)) ),
-              Point( bin_w*(i), hist_h - cvRound(b_hist.at<float>(i)) ),
-              Scalar( 255, 0, 0), 2, 8, 0  );
-        line( histImage, Point( bin_w*(i-1), hist_h - cvRound(g_hist.at<float>(i-1)) ),
-              Point( bin_w*(i), hist_h - cvRound(g_hist.at<float>(i)) ),
-              Scalar( 0, 255, 0), 2, 8, 0  );
-        line( histImage, Point( bin_w*(i-1), hist_h - cvRound(r_hist.at<float>(i-1)) ),
-              Point( bin_w*(i), hist_h - cvRound(r_hist.at<float>(i)) ),
-              Scalar( 0, 0, 255), 2, 8, 0  );
-    }
-
-    imshow("calcHist", histImage );
-
-
-	
         cvtColor(fcolor, fcolor, CV_RGBA2BGRA);
 	// cvtColor(fcolor, fcolor, RGBA2BGRA);//nope
 
         imshow("image", frameGray);
         imshow("optical flow", fcolor);
 
-        if ( (waitKey(3) & 0xFF) == 27) break; // allows time for fetch of events so images are displayed
+        if ( (waitKey(10) & 0xFF) == 27) break; // allows time for fetch of events so images are displayed
 
     }
     cout << "finished\n";
